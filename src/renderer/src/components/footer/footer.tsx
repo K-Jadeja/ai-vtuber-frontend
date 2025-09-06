@@ -54,21 +54,21 @@ const ToggleButton = memo(({ isCollapsed, onToggle }: ToggleButtonProps) => (
 ToggleButton.displayName = 'ToggleButton';
 
 const ActionButtons = memo(({ micOn, onMicToggle, onInterrupt }: ActionButtonsProps) => (
-  <HStack gap={2}>
+  <HStack gap={3}>
     <IconButton
-      bg={micOn ? 'green.500' : 'red.500'}
+      bg={micOn ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)'}
       {...footerStyles.footer.actionButton}
       onClick={onMicToggle}
     >
-      {micOn ? <BsMicFill /> : <BsMicMuteFill />}
+      {micOn ? <BsMicFill size="20" /> : <BsMicMuteFill size="20" />}
     </IconButton>
     <IconButton
       aria-label="Raise hand"
-      bg="yellow.500"
+      bg="rgba(245, 158, 11, 0.8)"
       {...footerStyles.footer.actionButton}
       onClick={onInterrupt}
     >
-      <IoHandRightSharp size="24" />
+      <IoHandRightSharp size="20" />
     </IconButton>
   </HStack>
 ));
@@ -91,8 +91,9 @@ const MessageInput = memo(({
           aria-label="Attach file"
           variant="ghost"
           {...footerStyles.footer.attachButton}
+          size="sm"
         >
-          <BsPaperclip size="24" />
+          <BsPaperclip size="18" />
         </IconButton>
         <Textarea
           value={value}
