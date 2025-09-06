@@ -86,8 +86,8 @@ const DEFAULT_VAD_SETTINGS: VADSettings = {
 
 const DEFAULT_VAD_STATE = {
   micOn: false,
-  autoStopMic: false,
-  autoStartMicOn: false,
+  autoStopMic: true, // Enable auto-stop by default
+  autoStartMicOn: true, // Enable auto-start by default
   autoStartMicOnConvEnd: false,
 };
 
