@@ -105,6 +105,37 @@ export const footerStyles: {
       zIndex: 2,
       borderRadius: '12px',
       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      p: 0,
+      lineHeight: 0,
+      verticalAlign: 'middle',
+      // ensure the svg icon doesn't sit on a text baseline
+      '& svg': {
+        display: 'block',
+        width: '18px',
+        height: '18px',
+        margin: 0,
+        transform: 'translateY(1px)',
+      },
+      // ensure Chakra's inner span used by IconButton fills the button and centers icon
+      '& > span': {
+        display: 'flex',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0,
+      },
+      // when Chakra renders nested spans, target the innermost svg directly
+      '& span > svg': {
+        display: 'block',
+        margin: 0,
+        width: '18px',
+        height: '18px',
+        transform: 'translateY(1px)',
+      },
       _hover: {
         bg: 'rgba(255, 255, 255, 0.1)',
         color: 'rgba(255, 255, 255, 0.9)',
