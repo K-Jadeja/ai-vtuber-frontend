@@ -13,7 +13,7 @@ export const layoutStyles = {
   appContainer: {
     width: '100vw',
     height: getAppHeight(),
-    bg: 'gray.900',
+    bg: 'transparent', // Make completely transparent
     color: 'white',
     overflow: 'hidden',
     position: 'relative',
@@ -34,7 +34,7 @@ export const layoutStyles = {
   },
   mainContent: {
     flex: 1,
-    height: { base: 'calc(100% - 120px)', md: '100%' },
+    height: '100%', // Change to full height
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -43,9 +43,11 @@ export const layoutStyles = {
     overflow: 'hidden',
   },
   canvas: {
-    position: 'relative',
+    position: 'absolute', // Make canvas absolute to cover full container
+    top: 0,
+    left: 0,
     width: '100%',
-    flex: 1,
+    height: '100%', // Cover full height including footer area
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     overflow: 'hidden',
     willChange: 'transform',
@@ -55,8 +57,11 @@ export const layoutStyles = {
     height: { base: '100px', md: '120px' },
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     willChange: 'transform',
-    position: 'relative',
-    zIndex: 1,
+    position: 'absolute', // Make footer absolute to float over canvas
+    bottom: 0,
+    left: 0,
+    zIndex: 10, // Increase z-index to stay above background
+    bg: 'transparent', // Keep footer background transparent
   },
   toggleButton: {
     position: 'absolute',
@@ -70,8 +75,8 @@ export const layoutStyles = {
     borderRightRadius: 'md',
     zIndex: 10,
   },
-  canvasHeight: (isFooterCollapsed: boolean) => ({
-    height: isFooterCollapsed ? 'calc(100% - 24px)' : 'calc(100% - 120px)',
+  canvasHeight: () => ({
+    height: '100%', // Canvas always covers full height, footer floats over it
   }),
   sidebarToggleButton: {
     position: 'absolute',

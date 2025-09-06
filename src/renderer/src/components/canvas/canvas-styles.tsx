@@ -1,11 +1,14 @@
 export const canvasStyles = {
   background: {
     container: {
-      position: 'relative',
+      position: 'absolute',
+      top: 0,
+      left: 0,
       width: '100%',
       height: '100%',
       overflow: 'hidden',
-      pointerEvents: 'auto',
+      pointerEvents: 'none',
+      zIndex: -1,
     },
     image: {
       position: 'absolute',
@@ -38,36 +41,46 @@ export const canvasStyles = {
   },
   subtitle: {
     container: {
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      padding: '15px 30px',
-      borderRadius: '12px',
+      // Simplified glass effect for subtitles
+      background: 'rgba(0, 0, 0, 0.4)',
+      backdropFilter: 'blur(25px) saturate(180%)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+      padding: '18px 32px',
+      borderRadius: '20px',
       minWidth: '60%',
       maxWidth: '95%',
+      position: 'relative',
     },
     text: {
       color: 'white',
       fontSize: '1.5rem',
       textAlign: 'center',
-      lineHeight: '1.4',
+      lineHeight: '1.5',
       whiteSpace: 'pre-wrap',
+      textShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+      position: 'relative',
+      zIndex: 1,
     },
   },
   wsStatus: {
     container: {
       position: 'relative',
-      // top: '20px',
-      // left: '20px',
       zIndex: 2,
-      padding: '8px 16px',
-      borderRadius: '20px',
+      padding: '10px 18px',
+      borderRadius: '16px',
       fontSize: '14px',
-      fontWeight: 'medium',
+      fontWeight: '500',
       color: 'white',
       transition: 'all 0.2s',
       cursor: 'pointer',
       userSelect: 'none',
+      // Simple glass effect without complex animations
+      backdropFilter: 'blur(20px) saturate(180%)',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
       _hover: {
-        opacity: 0.8,
+        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
       },
     },
   },
