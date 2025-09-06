@@ -20,7 +20,7 @@ function About(): JSX.Element {
   };
   
   const appVersion = '1.2.1';
-  // const appAuthor = 'Open LLM VTuber Team';
+  // const appAuthor = 'Aidoro Chat Team';
 
   return (
     <Stack {...settingStyles.common.container} gap={3}>
@@ -71,7 +71,7 @@ function About(): JSX.Element {
         <Text fontWeight="bold" mb={0}>
           {t("settings.about.copyright")}
         </Text>
-        <Text>© {new Date().getFullYear()} Open LLM VTuber Team</Text>
+        <Text>© {new Date().getFullYear()} Aidoro Chat Team</Text>
       </Box>
     </Stack>
   );

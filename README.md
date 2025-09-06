@@ -1,4 +1,4 @@
-# Open LLM Vtuber
+# Aidoro Chat
 
 An Electron application with React and TypeScript
 

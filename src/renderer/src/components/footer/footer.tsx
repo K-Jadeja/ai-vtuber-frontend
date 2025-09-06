@@ -3,7 +3,6 @@ import {
   Box, Textarea, IconButton, HStack,
 } from '@chakra-ui/react';
 import { BsMicFill, BsMicMuteFill, BsPaperclip } from 'react-icons/bs';
-import { IoHandRightSharp } from 'react-icons/io5';
 import { FiChevronDown } from 'react-icons/fi';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,7 +52,7 @@ const ToggleButton = memo(({ isCollapsed, onToggle }: ToggleButtonProps) => (
 
 ToggleButton.displayName = 'ToggleButton';
 
-const ActionButtons = memo(({ micOn, onMicToggle, onInterrupt }: ActionButtonsProps) => (
+const ActionButtons = memo(({ micOn, onMicToggle }: Omit<ActionButtonsProps, 'onInterrupt'>) => (
   <HStack gap={3}>
     <IconButton
       bg={micOn ? 'rgba(34, 197, 94, 0.8)' : 'rgba(239, 68, 68, 0.8)'}
@@ -61,14 +60,6 @@ const ActionButtons = memo(({ micOn, onMicToggle, onInterrupt }: ActionButtonsPr
       onClick={onMicToggle}
     >
       {micOn ? <BsMicFill size="20" /> : <BsMicMuteFill size="20" />}
-    </IconButton>
-    <IconButton
-      aria-label="Raise hand"
-      bg="rgba(245, 158, 11, 0.8)"
-      {...footerStyles.footer.actionButton}
-      onClick={onInterrupt}
-    >
-      <IoHandRightSharp size="20" />
     </IconButton>
   </HStack>
 ));
@@ -119,7 +110,6 @@ function Footer({ isCollapsed = false, onToggle }: FooterProps): JSX.Element {
     handleKeyPress,
     handleCompositionStart,
     handleCompositionEnd,
-    handleInterrupt,
     handleMicToggle,
     micOn,
   } = useFooter();
@@ -137,7 +127,6 @@ function Footer({ isCollapsed = false, onToggle }: FooterProps): JSX.Element {
             <ActionButtons
               micOn={micOn}
               onMicToggle={handleMicToggle}
-              onInterrupt={handleInterrupt}
             />
           </Box>
 
