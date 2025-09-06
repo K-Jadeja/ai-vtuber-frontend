@@ -31,11 +31,39 @@ import Subtitle from "./components/canvas/subtitle";
 import { ModeProvider, useMode } from "./context/mode-context";
 
 function AppContent(): JSX.Element {
-  const [showSidebar, setShowSidebar] = useState(true);
+  // Check if debug mode is enabled via URL parameter or localStorage
+  const checkDebugMode = () => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlDebug = urlParams.get('debug') === 'true';
+      const localDebug = localStorage.getItem('vtuber-debug') === 'true';
+      return urlDebug || localDebug;
+    }
+    return false;
+  };
+
+  const [allowSidebar, setAllowSidebar] = useState(checkDebugMode);
+  const [showSidebar, setShowSidebar] = useState(checkDebugMode);
   const [isFooterCollapsed, setIsFooterCollapsed] = useState(false);
   const { mode } = useMode();
   const isElectron = window.api !== undefined;
   const live2dContainerRef = useRef<HTMLDivElement>(null);
+
+  // Add keyboard shortcut for debug mode (Ctrl+Shift+Alt+D)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.altKey && event.key === 'D') {
+        event.preventDefault();
+        const newDebugMode = !allowSidebar;
+        setAllowSidebar(newDebugMode);
+        setShowSidebar(newDebugMode);
+        localStorage.setItem('vtuber-debug', newDebugMode.toString());
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [allowSidebar]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -73,11 +101,11 @@ function AppContent(): JSX.Element {
     zIndex: 5, // Ensure it's layered correctly below UI but above background
     left: {
       base: "0px", // Column layout (base): Start from left edge
-      md: sidebarVisible ? "440px" : "24px", // Row layout (md+): Offset by sidebar width
+      md: (sidebarVisible && allowSidebar) ? "440px" : "24px", // Row layout (md+): Offset by sidebar width only if sidebar is allowed
     },
     width: {
       base: "100%", // Column layout (base): Full width
-      md: `calc(100% - ${sidebarVisible ? "440px" : "24px"})`, // Row layout (md+): Adjust width based on sidebar
+      md: `calc(100% - ${(sidebarVisible && allowSidebar) ? "440px" : "24px"})`, // Row layout (md+): Adjust width based on sidebar availability
     },
   });
 
@@ -110,16 +138,23 @@ function AppContent(): JSX.Element {
           {isElectron && <TitleBar />}
           {/* Apply styles by spreading */}
           <Flex {...layoutStyles.appContainer}>
-            <Box
-              {...layoutStyles.sidebar}
-              {...(!showSidebar && { width: "24px" })}
+            {/* Only render sidebar container if debug mode allows it */}
+            {allowSidebar && (
+              <Box
+                {...layoutStyles.sidebar}
+                {...(!showSidebar && { width: "24px" })}
+              >
+                <Sidebar
+                  isCollapsed={!showSidebar}
+                  onToggle={() => setShowSidebar(!showSidebar)}
+                />
+              </Box>
+            )}
+            <Box 
+              {...layoutStyles.mainContent}
+              // Adjust left margin when sidebar is hidden
+              {...(!allowSidebar && { marginLeft: "0px" })}
             >
-              <Sidebar
-                isCollapsed={!showSidebar}
-                onToggle={() => setShowSidebar(!showSidebar)}
-              />
-            </Box>
-            <Box {...layoutStyles.mainContent}>
               <Background />
               <Box position="absolute" top="20px" left="20px" zIndex={10}>
                 <WebSocketStatus />
