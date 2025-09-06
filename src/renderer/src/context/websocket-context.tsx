@@ -3,8 +3,29 @@ import React, { useContext, useCallback } from 'react';
 import { wsService } from '@/services/websocket-service';
 import { useLocalStorage } from '@/hooks/utils/use-local-storage';
 
-const DEFAULT_WS_URL = 'ws://127.0.0.1:12393/client-ws';
-const DEFAULT_BASE_URL = 'http://127.0.0.1:12393';
+// ✅ SOLUTION - Dynamic environment detection
+const getDefaultWebSocketURL = (): string => {
+  if (typeof window === "undefined") {
+    return "ws://localhost:12393/client-ws";
+  }
+
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  const host = window.location.host;
+  return `${protocol}//${host}/client-ws`;
+};
+
+const getDefaultBaseURL = (): string => {
+  if (typeof window === "undefined") {
+    return "http://localhost:12393";
+  }
+
+  const protocol = window.location.protocol;
+  const host = window.location.host;
+  return `${protocol}//${host}`;
+};
+
+const DEFAULT_WS_URL = getDefaultWebSocketURL();
+const DEFAULT_BASE_URL = getDefaultBaseURL();
 
 export interface HistoryInfo {
   uid: string;
