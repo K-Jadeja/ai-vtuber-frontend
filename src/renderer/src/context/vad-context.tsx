@@ -92,7 +92,7 @@ const DEFAULT_VAD_SETTINGS: VADSettings = {
 
 const DEFAULT_VAD_STATE = {
   micOn: false,
-  autoStopMic: true, // Enable auto-stop by default
+  autoStopMic: false, // user can interupt AI by speaking
   autoStartMicOn: true, // Enable auto-start by default
   autoStartMicOnConvEnd: true,
 };
