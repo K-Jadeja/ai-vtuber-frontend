@@ -52,7 +52,7 @@
       "allowButtonTrigger": "通过举手按钮提示AI发言"
     },
     "about": {
-      "title": "Aidoro Chat 前端",
+      "title": "Aidoru Chat 前端",
       "version": "版本",
       "projectLinks": "项目链接",
       "github": "GitHub",
@@ -131,4 +131,4 @@
     "connecting": "连接中",
     "clickToReconnect": "点击重新连接"
   }
-} 
+}

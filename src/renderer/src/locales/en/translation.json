@@ -54,7 +54,7 @@
       "allowButtonTrigger": "Prompt AI to Speak via Raise Hand Button"
     },
     "about": {
-      "title": "Aidoro Chat Frontend",
+      "title": "Aidoru Chat Frontend",
       "version": "Version",
       "projectLinks": "Project Links",
       "github": "GitHub",
@@ -134,4 +134,4 @@
     "connecting": "Connecting",
     "clickToReconnect": "Click to Reconnect"
   }
-} 
+}
