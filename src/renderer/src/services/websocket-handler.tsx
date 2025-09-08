@@ -291,9 +291,10 @@ function WebSocketHandler({ children }: { children: React.ReactNode }) {
     }
   }, [aiState, addAudioTask, appendHumanMessage, baseUrl, bgUrlContext, setAiState, setConfName, setConfUid, setConfigFiles, setCurrentHistoryUid, setHistoryList, setMessages, setModelInfo, setSubtitleText, startMic, stopMic, setSelfUid, setGroupMembers, setIsOwner, backendSynthComplete, setBackendSynthComplete, clearResponse, handleControlMessage, appendOrUpdateToolCallMessage, interrupt, setBrowserViewData, t]);
 
-  useEffect(() => {
-    wsService.connect(wsUrl);
-  }, [wsUrl]);
+  // Removed automatic connection - now requires manual connection
+  // useEffect(() => {
+  //   wsService.connect(wsUrl);
+  // }, [wsUrl]);
 
   useEffect(() => {
     const stateSubscription = wsService.onStateChange(setWsState);

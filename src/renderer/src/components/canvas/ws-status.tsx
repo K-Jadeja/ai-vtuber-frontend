@@ -30,7 +30,9 @@ const WebSocketStatus = memo((): JSX.Element => {
       cursor={isDisconnected ? 'pointer' : 'default'}
       _hover={{
         opacity: isDisconnected ? 0.8 : 1,
+        transform: isDisconnected ? 'scale(1.05)' : 'none',
       }}
+      transition="all 0.2s ease"
     >
       <MemoizedStatusContent textKey={textKey} />
     </Box>

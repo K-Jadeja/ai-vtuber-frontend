@@ -129,6 +129,7 @@
   "wsStatus": {
     "connected": "已连接",
     "connecting": "连接中",
+    "clickToConnect": "点击连接",
     "clickToReconnect": "点击重新连接"
   }
 }

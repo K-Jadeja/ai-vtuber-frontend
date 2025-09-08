@@ -132,6 +132,7 @@
   "wsStatus": {
     "connected": "Connected",
     "connecting": "Connecting",
+    "clickToConnect": "Click to Connect",
     "clickToReconnect": "Click to Reconnect"
   }
 }
