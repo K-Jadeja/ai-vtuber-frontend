@@ -34,6 +34,8 @@ build
 coverage
 
 # Editor directories and files
+.playwright-mcp/
+
 .vscode/*
 !.vscode/extensions.json
 .idea

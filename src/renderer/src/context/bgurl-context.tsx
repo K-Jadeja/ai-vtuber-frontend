@@ -2,7 +2,6 @@ import {
   createContext, useMemo, useContext, useState, useCallback,
 } from 'react';
 import { useLocalStorage } from '@/hooks/utils/use-local-storage';
-import { useWebSocket } from './websocket-context';
 
 /**
  * Background file interface
@@ -41,8 +40,7 @@ const BgUrlContext = createContext<BgUrlContextState | null>(null);
  * @param {React.ReactNode} props.children - Child components
  */
 export function BgUrlProvider({ children }: { children: React.ReactNode }) {
-  const { baseUrl } = useWebSocket();
-  const DEFAULT_BACKGROUND = `${baseUrl}/bg/ceiling-window-room-night.jpeg`;
+  const DEFAULT_BACKGROUND = './bg/ceiling-window-room-night.jpeg';
 
   // Local storage for persistent background URL
   const [backgroundUrl, setBackgroundUrl] = useLocalStorage<string>(
