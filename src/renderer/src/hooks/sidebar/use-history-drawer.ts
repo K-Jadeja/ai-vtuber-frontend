@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useChatHistory } from '@/context/chat-history-context';
 import { useWebSocket, HistoryInfo } from '@/context/websocket-context';
 import { toaster } from '@/components/ui/toaster';
+import { useInterrupt } from '@/components/canvas/live2d';
 
 export const useHistoryDrawer = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export const useHistoryDrawer = () => {
     updateHistoryList,
   } = useChatHistory();
   const { sendMessage } = useWebSocket();
+  const { interrupt } = useInterrupt();
 
   const fetchAndSetHistory = (uid: string) => {
     if (!uid || uid === currentHistoryUid) return;
@@ -24,6 +26,9 @@ export const useHistoryDrawer = () => {
       const latestMessage = messages[messages.length - 1];
       updateHistoryList(currentHistoryUid, latestMessage);
     }
+
+    // 🔧 FIX: Add interrupt call to stop TTS when switching to old chat
+    interrupt();
 
     setCurrentHistoryUid(uid);
     sendMessage({
