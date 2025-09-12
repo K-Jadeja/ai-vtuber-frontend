@@ -29,14 +29,15 @@ import Background from "./components/canvas/background";
 import WebSocketStatus from "./components/canvas/ws-status";
 import Subtitle from "./components/canvas/subtitle";
 import { ModeProvider, useMode } from "./context/mode-context";
+import { BackendStatusIndicator } from "./components/debug/backend-status-indicator";
 
 function AppContent(): JSX.Element {
   // Check if debug mode is enabled via URL parameter or localStorage
   const checkDebugMode = () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
-      const urlDebug = urlParams.get('debug') === 'true';
-      const localDebug = localStorage.getItem('vtuber-debug') === 'true';
+      const urlDebug = urlParams.get("debug") === "true";
+      const localDebug = localStorage.getItem("vtuber-debug") === "true";
       return urlDebug || localDebug;
     }
     return false;
@@ -52,17 +53,22 @@ function AppContent(): JSX.Element {
   // Add keyboard shortcut for debug mode (Ctrl+Shift+Alt+D)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.altKey && event.key === 'D') {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.shiftKey &&
+        event.altKey &&
+        event.key === "D"
+      ) {
         event.preventDefault();
         const newDebugMode = !allowSidebar;
         setAllowSidebar(newDebugMode);
         setShowSidebar(newDebugMode);
-        localStorage.setItem('vtuber-debug', newDebugMode.toString());
+        localStorage.setItem("vtuber-debug", newDebugMode.toString());
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [allowSidebar]);
 
   useEffect(() => {
@@ -75,15 +81,14 @@ function AppContent(): JSX.Element {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-    
-  document.documentElement.style.overflow = 'hidden';
-  document.body.style.overflow = 'hidden';
-  document.documentElement.style.height = '100%';
-  document.body.style.height = '100%';
-  document.documentElement.style.position = 'fixed';
-  document.body.style.position = 'fixed';
-  document.documentElement.style.width = '100%';
-  document.body.style.width = '100%';
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+  document.documentElement.style.height = "100%";
+  document.body.style.height = "100%";
+  document.documentElement.style.position = "fixed";
+  document.body.style.position = "fixed";
+  document.documentElement.style.width = "100%";
+  document.body.style.width = "100%";
 
   // Define base style properties shared across modes/breakpoints
   const live2dBaseStyle = {
@@ -101,11 +106,11 @@ function AppContent(): JSX.Element {
     zIndex: 5, // Ensure it's layered correctly below UI but above background
     left: {
       base: "0px", // Column layout (base): Start from left edge
-      md: (sidebarVisible && allowSidebar) ? "440px" : "24px", // Row layout (md+): Offset by sidebar width only if sidebar is allowed
+      md: sidebarVisible && allowSidebar ? "440px" : "24px", // Row layout (md+): Offset by sidebar width only if sidebar is allowed
     },
     width: {
       base: "100%", // Column layout (base): Full width
-      md: `calc(100% - ${(sidebarVisible && allowSidebar) ? "440px" : "24px"})`, // Row layout (md+): Adjust width based on sidebar availability
+      md: `calc(100% - ${sidebarVisible && allowSidebar ? "440px" : "24px"})`, // Row layout (md+): Adjust width based on sidebar availability
     },
   });
 
@@ -150,7 +155,7 @@ function AppContent(): JSX.Element {
                 />
               </Box>
             )}
-            <Box 
+            <Box
               {...layoutStyles.mainContent}
               // Adjust left margin when sidebar is hidden
               {...(!allowSidebar && { marginLeft: "0px" })}
@@ -219,6 +224,7 @@ function AppWithGlobalStyles(): JSX.Element {
                             <BrowserProvider>
                               <WebSocketHandler>
                                 <Toaster />
+                                <BackendStatusIndicator />
                                 <AppContent />
                               </WebSocketHandler>
                             </BrowserProvider>

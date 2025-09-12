@@ -1,36 +1,23 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React, { useContext, useCallback } from 'react';
-import { wsService } from '@/services/websocket-service';
-import { useLocalStorage } from '@/hooks/utils/use-local-storage';
+import React, { useContext, useCallback } from "react";
+import { wsService } from "@/services/websocket-service";
+import { useLocalStorage } from "@/hooks/utils/use-local-storage";
+import { getBackendConfig, debugBackendConfig } from "@/config/backend-config";
 
-// ✅ SOLUTION - Dynamic environment detection
-const getDefaultWebSocketURL = (): string => {
-  if (typeof window === "undefined") {
-    return "ws://localhost:12393/client-ws";
-  }
+// Get smart backend configuration
+const backendConfig = getBackendConfig();
+const DEFAULT_WS_URL = backendConfig.wsUrl;
+const DEFAULT_BASE_URL = backendConfig.baseUrl;
 
-  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-  const host = window.location.host;
-  return `${protocol}//${host}/client-ws`;
-};
-
-const getDefaultBaseURL = (): string => {
-  if (typeof window === "undefined") {
-    return "http://localhost:12393";
-  }
-
-  const protocol = window.location.protocol;
-  const host = window.location.host;
-  return `${protocol}//${host}`;
-};
-
-const DEFAULT_WS_URL = getDefaultWebSocketURL();
-const DEFAULT_BASE_URL = getDefaultBaseURL();
+// Debug configuration in development
+if (process.env.NODE_ENV === "development") {
+  debugBackendConfig();
+}
 
 export interface HistoryInfo {
   uid: string;
   latest_message: {
-    role: 'human' | 'ai';
+    role: "human" | "ai";
     timestamp: string;
     content: string;
   } | null;
@@ -49,7 +36,7 @@ interface WebSocketContextProps {
 
 export const WebSocketContext = React.createContext<WebSocketContextProps>({
   sendMessage: wsService.sendMessage.bind(wsService),
-  wsState: 'CLOSED',
+  wsState: "CLOSED",
   reconnect: () => wsService.connect(DEFAULT_WS_URL),
   wsUrl: DEFAULT_WS_URL,
   setWsUrl: () => {},
@@ -60,7 +47,7 @@ export const WebSocketContext = React.createContext<WebSocketContextProps>({
 export function useWebSocket() {
   const context = useContext(WebSocketContext);
   if (!context) {
-    throw new Error('useWebSocket must be used within a WebSocketProvider');
+    throw new Error("useWebSocket must be used within a WebSocketProvider");
   }
   return context;
 }
@@ -69,16 +56,19 @@ export const defaultWsUrl = DEFAULT_WS_URL;
 export const defaultBaseUrl = DEFAULT_BASE_URL;
 
 export function WebSocketProvider({ children }: { children: React.ReactNode }) {
-  const [wsUrl, setWsUrl] = useLocalStorage('wsUrl', DEFAULT_WS_URL);
-  const [baseUrl, setBaseUrl] = useLocalStorage('baseUrl', DEFAULT_BASE_URL);
-  const handleSetWsUrl = useCallback((url: string) => {
-    setWsUrl(url);
-    wsService.connect(url);
-  }, [setWsUrl]);
+  const [wsUrl, setWsUrl] = useLocalStorage("wsUrl", DEFAULT_WS_URL);
+  const [baseUrl, setBaseUrl] = useLocalStorage("baseUrl", DEFAULT_BASE_URL);
+  const handleSetWsUrl = useCallback(
+    (url: string) => {
+      setWsUrl(url);
+      wsService.connect(url);
+    },
+    [setWsUrl]
+  );
 
   const value = {
     sendMessage: wsService.sendMessage.bind(wsService),
-    wsState: 'CLOSED',
+    wsState: "CLOSED",
     reconnect: () => wsService.connect(wsUrl),
     wsUrl,
     setWsUrl: handleSetWsUrl,
