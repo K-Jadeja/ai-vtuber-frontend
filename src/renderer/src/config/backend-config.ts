@@ -15,7 +15,7 @@ export const BACKEND_URLS = {
     "https://az-ca-b6zn2mwoivw2u.jollygrass-14681beb.westus2.azurecontainerapps.io",
 
   // Local development
-  LOCAL: "http://localhost:12393",
+  LOCAL: "http://127.0.0.1:10000",
 } as const;
 
 /**
@@ -25,7 +25,7 @@ export function getBackendConfig(): BackendConfig {
   if (typeof window === "undefined") {
     // SSR or Node.js environment - default to local
     return {
-      wsUrl: "ws://localhost:12393/client-ws",
+      wsUrl: "ws://127.0.0.1:10000/client-ws",
       baseUrl: BACKEND_URLS.LOCAL,
       environment: "development",
     };
@@ -49,9 +49,9 @@ export function getBackendConfig(): BackendConfig {
   }
 
   // Local development
-  if (host.includes("localhost")) {
+  if (host.includes("localhost") || host.includes("127.0.0.1")) {
     // Backend serving frontend (integrated)
-    if (port === "12393") {
+    if (port === "10000") {
       return {
         wsUrl: `${wsProtocol}//${host}/client-ws`,
         baseUrl: `${protocol}//${host}`,
@@ -61,7 +61,7 @@ export function getBackendConfig(): BackendConfig {
 
     // Separate frontend dev server
     return {
-      wsUrl: "ws://localhost:12393/client-ws",
+      wsUrl: "ws://127.0.0.1:10000/client-ws",
       baseUrl: BACKEND_URLS.LOCAL,
       environment: "development",
     };

@@ -1,5 +1,6 @@
 import { useMemo, useCallback, useState } from 'react';
 import { useWebSocket } from '@/context/websocket-context';
+import { useConnectionState } from '@/context/connection-state-context';
 
 interface WSStatusInfo {
   color: string
@@ -10,6 +11,7 @@ interface WSStatusInfo {
 
 export const useWSStatus = () => {
   const { wsState, reconnect } = useWebSocket();
+  const { connectionStatus } = useConnectionState();
   const [hasAttemptedConnection, setHasAttemptedConnection] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -20,22 +22,24 @@ export const useWSStatus = () => {
   }, [wsState, reconnect]);
 
   const statusInfo = useMemo((): WSStatusInfo => {
-    switch (wsState) {
-      case 'OPEN':
+    // Use the new connection state logic
+    switch (connectionStatus) {
+      case 'ready':
         return {
           color: 'green.500',
           textKey: 'wsStatus.connected',
           isDisconnected: false,
           handleClick,
         };
-      case 'CONNECTING':
+      case 'connecting':
         return {
           color: 'yellow.500',
           textKey: 'wsStatus.connecting',
           isDisconnected: false,
           handleClick,
         };
-      case 'CLOSED':
+      case 'disconnected':
+      default:
         // If we've never attempted to connect, show "Click to Connect"
         // If we've attempted but failed, show "Click to Reconnect"
         return {
@@ -44,15 +48,8 @@ export const useWSStatus = () => {
           isDisconnected: true,
           handleClick,
         };
-      default:
-        return {
-          color: 'red.500',
-          textKey: hasAttemptedConnection ? 'wsStatus.clickToReconnect' : 'wsStatus.clickToConnect',
-          isDisconnected: true,
-          handleClick,
-        };
     }
-  }, [wsState, handleClick, hasAttemptedConnection]);
+  }, [connectionStatus, handleClick, hasAttemptedConnection]);
 
   return statusInfo;
 };

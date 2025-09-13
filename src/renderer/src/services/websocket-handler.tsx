@@ -40,6 +40,7 @@ function WebSocketHandler({ children }: { children: React.ReactNode }) {
   const autoStartMicOnConvEndRef = useRef(autoStartMicOnConvEnd);
   const { interrupt } = useInterrupt();
   const { setBrowserViewData } = useBrowser();
+  // Remove useConnectionState from here to avoid circular dependency
 
   useEffect(() => {
     autoStartMicOnConvEndRef.current = autoStartMicOnConvEnd;
@@ -190,6 +191,9 @@ function WebSocketHandler({ children }: { children: React.ReactNode }) {
             timestamp: new Date().toISOString(),
           };
           setHistoryList((prev: HistoryInfo[]) => [newHistory, ...prev]);
+          
+          // History is ready - the ConnectionStateProvider will detect this via currentHistoryUid
+          
           toaster.create({
             title: t('notification.newChatHistory'),
             type: 'success',
